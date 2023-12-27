@@ -9,8 +9,6 @@ space=[]#放置水管的空間(二維)
 for i in range(N):
     space.append(input())
 #上,右,下,左
-X=[1,1,1,1];I=[1,0,1,0];H=[0,1,0,1];L=[1,1,0,0];
-T7=[0,0,1,1];J=[1,0,0,1];F=[0,1,1,0]
 UP="XILJ"
 RIGHT="XHLF"
 DOWN="XI7F"
@@ -30,36 +28,29 @@ for ScreenY in range(N):
             visted[ScreenY][ScreenX]=1
             continue
         else:
-            # if space[ScreenY][ScreenX] in UP:
-            #     WORK.append((ScreenX,ScreenY,DOWN))
-            # if space[ScreenY][ScreenX] in RIGHT:
-            #     WORK.append((ScreenX,ScreenY,LEFT))
-            # if space[ScreenY][ScreenX] in DOWN:
-            #     WORK.append((ScreenX,ScreenY,UP))
-            # if space[ScreenY][ScreenX] in LEFT:
-            #     WORK.append((ScreenX,ScreenY,RIGHT))
-            WORK.append((ScreenX,ScreenY,"XIHL7FJ"))
+            WORK.append((ScreenX,ScreenY))
             SumTube=0
             while(WORK!=[]):
                 flag=0
                 # print(WORK,"%")
                 # print(space[nowY][nowX])
-                nowX,nowY,shape=WORK.pop(0)#X座標,y座標,可允許的方向水管
+                nowX,nowY=WORK.pop(0)#X座標,y座標
                 #已經拜訪過了或沒有管子
-                if visted[nowY][nowX] ==1 or space[nowY][nowX] in '0':
+                if visted[nowY][nowX] ==1 or space[nowY][nowX] == '0':
                     continue
-                if space[nowY][nowX] in UP and (space[nowY][nowX] in shape ) and nowY-1>=0:
+                #判斷方向、鄰居可以銜接、沒有越界
+                if space[nowY][nowX] in UP and nowY-1>=0 and space[nowY-1][nowX] in DOWN:
                     flag=1
-                    WORK.append((nowX,nowY-1,DOWN))
-                if space[nowY][nowX] in RIGHT and space[nowY][nowX] in shape and nowX+1<M:
+                    WORK.append((nowX,nowY-1))
+                if space[nowY][nowX] in RIGHT and nowX+1<M and space[nowY][nowX+1] in LEFT:
                     flag=1
-                    WORK.append((nowX+1,nowY,LEFT))
-                if space[nowY][nowX] in DOWN and space[nowY][nowX] in shape and nowY+1<N:
+                    WORK.append((nowX+1,nowY))
+                if space[nowY][nowX] in DOWN and nowY+1<N and space[nowY+1][nowX] in UP:
                     flag=1
-                    WORK.append((nowX,nowY+1,UP))
-                if space[nowY][nowX] in LEFT and space[nowY][nowX] in shape and nowX-1>=0:
+                    WORK.append((nowX,nowY+1))
+                if space[nowY][nowX] in LEFT and nowX-1>=0 and space[nowY][nowX-1] in RIGHT:
                     flag=1
-                    WORK.append((nowX-1,nowY,RIGHT))
+                    WORK.append((nowX-1,nowY))
                 visted[nowY][nowX]=1#把現在這格加入已造訪清單
                 if flag:
                     SumTube+=1
